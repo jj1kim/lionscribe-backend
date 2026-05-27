@@ -2,8 +2,6 @@
 
 멋사 활동 보고서를 마크다운으로 작성하면 PDF로 변환해주는 서비스의 백엔드.
 
-> 이 레포에는 4단계 챌린지를 위한 결함이 의도적으로 내장되어 있습니다.
-
 ## 기술 스택
 
 - Backend: Django 5 + DRF + simplejwt
@@ -15,8 +13,7 @@
 
 ## weasyprint system 의존성
 
-weasyprint는 OS 수준 라이브러리가 필요. EC2 Ubuntu(또는 로컬 Linux)에서 다음을
-먼저 설치하세요. **이 step은 `pip install -r requirements.txt`보다 *먼저***
+weasyprint는 OS 수준 라이브러리가 필요. EC2 Ubuntu에서 다음을 먼저 설치하세요. **이 step은 `pip install -r requirements.txt`보다 *먼저***
 실행되어야 합니다.
 
 ```bash
@@ -30,8 +27,7 @@ macOS 로컬은 `brew install pango cairo libffi`.
 ## 환경변수
 
 - `SECRET_KEY` — Django 시크릿 키
-- `CHAOS_TOKEN` — **챌린지 채점기가 백엔드를 죽일 때 사용하는 토큰**. 진행자에게
-  발급받은 값을 사용
+- `CHAOS_TOKEN` — **챌린지 채점기가 백엔드를 죽일 때 사용하는 토큰**. 아무 랜덤 문자열을 직접 생성해서 넣으시면 됩니다. (예시 생성 명령어: `python3 -c 'import secrets; print(secrets.token_urlsafe(32))'`) 채점기 실행 시에 여기서 생성한 값을 --chaos-token 인자로 넘기시면 됩니다. 
 
 ## 로컬 실행
 
@@ -48,7 +44,7 @@ python manage.py runserver
 
 ## AWS 배포
 
-**작년 AWS 배포 가이드** ("4. 배포해보자!" 페이지)를 그대로 따라가면 됩니다.
+**AWS 배포 가이드**를 그대로 따라가면 됩니다.
 차이점:
 
 - 가이드의 `11th-week-back` → `lionscribe-backend`
@@ -61,9 +57,8 @@ python manage.py runserver
       libharfbuzz0b libffi-dev libcairo2 fonts-noto-cjk
   ```
 - nginx 설정에 `/media/` 경로 static 서빙 추가 (PDF 다운로드용)
-- ⚠️ 챌린지 채점기가 `/api/_chaos/restart/`로 백엔드를 강제 종료시킬 수 있다.
-  gunicorn systemd 유닛에 `Restart=always`가 `[Service]` 섹션에 *반드시*
-  들어가야 함 — 가이드의 systemd unit 파일에 한 줄 추가
+- ⚠️ 챌린지 채점기가 `/api/_chaos/restart/`로 채점 과정 중에 백엔드를 강제 종료시킬 수 있습니다.
+  배포 과정 중에서 이 상황에 대비하기 위해 gunicorn systemd 유닛에 `Restart=always`가 `[Service]` 섹션에 *반드시* 들어가야 합니다. 가이드의 systemd unit 파일에 한 줄만 추가하면 됩니다. 
 
 ## API 요약
 
