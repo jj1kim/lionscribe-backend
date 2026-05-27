@@ -58,7 +58,6 @@ python manage.py runserver
   ```
 - nginx 설정에 `/media/` 경로 static 서빙 추가 (PDF 다운로드용)
 - ⚠️ 챌린지 채점기가 `/api/_chaos/restart/`로 채점 과정 중에 백엔드를 강제 종료시킬 수 있습니다.
-  배포 과정 중에서 이 상황에 대비하기 위해 gunicorn systemd 유닛에 `Restart=always`가 `[Service]` 섹션에 *반드시* 들어가야 합니다. 가이드의 systemd unit 파일에 한 줄만 추가하면 됩니다. 
 
 ## API 요약
 
